@@ -1,0 +1,24 @@
+@import "../../scss/index.scss";
+
+.auth {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $light;
+
+  .content {
+    .container-form {
+      width: 40%;
+      margin-right: 30px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .container-form {
+    width: 100% !important;
+    margin-left: 30px;
+  }
+}
