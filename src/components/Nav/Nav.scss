@@ -1,0 +1,27 @@
+@import "../../scss/index.scss";
+
+.nav{
+    margin-top: 8px;
+    padding-top: 13px;
+    .nav-1{
+        background-color: $background-dark;
+        align-items: center;
+
+        h1{
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+    .nav-2{
+        background-color: $background-light;
+
+        p{
+            text-align: end;
+
+        }
+    }
+    img{
+        height: 100%;
+    }
+    
+}

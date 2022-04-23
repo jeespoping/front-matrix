@@ -1,26 +1,23 @@
-import axios from 'axios';
-import { getToken } from '../utils/token';
+import axios from "axios";
+import { getToken } from "../utils/token";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
 const httpSinToken = axios.create({
-    baseURL,
-    headers: {
-        'Content-type': 'application/json',
-    }
-})
+  baseURL,
+  headers: {
+    "Content-type": "application/json",
+  },
+});
 
-const token = getToken() || '';
+const token = getToken() || "";
 
 const httpConToken = axios.create({
-    baseURL,
-    headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    }
-})
+  baseURL,
+  headers: {
+    "Content-type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
+});
 
-export{
-    httpSinToken,
-    httpConToken,
-} 
+export { httpSinToken, httpConToken };

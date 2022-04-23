@@ -1,0 +1,20 @@
+@import "../../scss/index.scss";
+
+.table-basic{
+    margin-top: 50px;
+    padding-bottom: 50px;
+    .rdt_TableHeadRow{
+        background: $background-super-dark !important;
+        color: $text-light;
+        font-weight: bold;
+    }
+
+    .rdt_TableRow{
+        &:nth-child(odd){
+            background-color: $background-light;
+        }
+        &:nth-child(even){
+            background-color: $background-dark;
+        }
+    }
+}
