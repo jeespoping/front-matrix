@@ -16,3 +16,16 @@ export const maestrosMatrixReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export const MaestrosMatrixDatosReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case types.maestrosMatrixDatos:
+      return {
+        ...state,
+        ...action.payload,
+        checking: false,
+      };
+    default:
+      return state;
+  }
+};

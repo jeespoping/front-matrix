@@ -7,4 +7,5 @@ export const types = {
 
   // maestros matrix
   maestrosMatrixPermisos: "[MaestrosMatrix] Permisos",
+  maestrosMatrixDatos: "[MaestrosMatrixDatos] Datos",
 };

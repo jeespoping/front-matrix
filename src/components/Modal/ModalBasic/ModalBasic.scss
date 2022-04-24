@@ -1,0 +1,13 @@
+@import "../../../scss/index.scss";
+
+.modal-basic{
+    border-radius: 15px !important;
+    overflow: hidden;
+
+    .header{
+        text-align: center;
+        color: white !important;
+        font-weight: bold;
+        background-color: $background-super-dark !important;
+    }
+}
