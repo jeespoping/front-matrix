@@ -9,14 +9,14 @@ export default function SuperTable({ columns, datas }) {
   const [filterText, setFilterText] = useState("");
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
 
-  const filteredItems = filter(
+  /* const filteredItems = filter(
     datas,
     (item) =>
-      item[data.detalles[0].descripcion] &&
-      item[data.detalles[0].descripcion]
+      item[data?.detalles[0].descripcion] &&
+      item[data?.detalles[0].descripcion]
         .toLowerCase()
         .includes(filterText.toLowerCase())
-  );
+  ); */
 
   const subHeaderComponentMemo = useMemo(() => {
     return (
@@ -66,7 +66,7 @@ export default function SuperTable({ columns, datas }) {
     <Container className="super-table">
       <DataTable
         columns={columns}
-        data={filteredItems}
+        data={datas}
         customStyles={customStyles}
         pagination
         subHeader

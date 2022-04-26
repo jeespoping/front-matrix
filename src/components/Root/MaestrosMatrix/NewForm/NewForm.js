@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Checkbox, Form, Grid } from "semantic-ui-react";
 import { map } from "lodash";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./NewForm.scss";
+import DinamicSelect from "../DinamicSelect";
+import DinamicRelation from "../DinamicRelations";
+import { startNewData } from "../../../../actions/root/maestrosMatrix";
 
 export default function NewForm({ setShowModal }) {
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
-  const [formData, setFormData] = useState(initialValueForm(data.detalles));
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: initialValueForm(data.detalles),
     validationSchema: Yup.object(validation(data.detalles)),
     onSubmit: (formValue) => {
       const state = {
-        ...formData,
-        ...formValue,
+        data: formValue,
+        permisos: data.permisos,
       };
-      console.log(state);
+      dispatch(startNewData(state, setShowModal));
     },
   });
 
@@ -46,6 +48,7 @@ export default function NewForm({ setShowModal }) {
                 ),
                 1: (
                   <Form.Input
+                    width={12}
                     type="number"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
@@ -55,6 +58,7 @@ export default function NewForm({ setShowModal }) {
                 ),
                 2: (
                   <Form.Input
+                    width={12}
                     type="number"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
@@ -64,6 +68,7 @@ export default function NewForm({ setShowModal }) {
                 ),
                 3: (
                   <Form.Input
+                    width={12}
                     type="text"
                     placeholder="Inserte la fecha"
                     name={detalle.descripcion}
@@ -73,6 +78,7 @@ export default function NewForm({ setShowModal }) {
                 ),
                 11: (
                   <Form.Input
+                    width={12}
                     type="text"
                     placeholder="Inserte la hora"
                     name={detalle.descripcion}
@@ -87,10 +93,12 @@ export default function NewForm({ setShowModal }) {
                       data.checked
                         ? formik.setFieldValue(detalle.descripcion, "on")
                         : formik.setFieldValue(detalle.descripcion, "off");
-                      setFormData(formData);
                     }}
                   />
                 ),
+                5: <DinamicSelect formik={formik} detalle={detalle} />,
+                9: <DinamicRelation formik={formik} detalle={detalle} />,
+                18: <DinamicRelation formik={formik} detalle={detalle} />,
               }[detalle.tipo] || <Form.Input width={12} type="text" disabled />}
             </Grid.Column>
           </Grid>
@@ -157,6 +165,17 @@ function validation(datas) {
             "Debe estar en formato hh:mm:ss"
           )
           .required("El campo debe estar lleno");
+        break;
+
+      case "9":
+        values[data.descripcion] = Yup.string(
+          "El valor debe ser un String"
+        ).required("El campo debe estar lleno");
+        break;
+      case "18":
+        values[data.descripcion] = Yup.string(
+          "El valor debe ser un String"
+        ).required("El campo debe estar lleno");
         break;
 
       default:

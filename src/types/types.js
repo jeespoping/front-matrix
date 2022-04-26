@@ -5,7 +5,15 @@ export const types = {
   authStartTokenRenew: "[auth] Start token renew",
   authLogout: "[auth] Logout",
 
+  // ui
+  uiStartLoading: "[UI] Start Loading",
+  uiFinishLoading: "[UI] Finish loading",
+
   // maestros matrix
   maestrosMatrixPermisos: "[MaestrosMatrix] Permisos",
+
   maestrosMatrixDatos: "[MaestrosMatrixDatos] Datos",
+  maestrosMAtrixDatosAdd: "[MaestrosMatrixDatos] Nuevo Dato",
+
+  maestrosMatrixSelect: "[MaestrosMatrixSelect] Opciones",
 };

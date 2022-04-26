@@ -1,6 +1,7 @@
 import { httpConToken } from "../../helpers/http";
 import { types } from "../../types/types";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export const getPermisos = () => {
   return async (dispatch) => {
@@ -34,6 +35,51 @@ export const getDetalles = (tabla) => {
   };
 };
 
+export const getSelects = async (detalle) => {
+  try {
+    const { data } = await httpConToken.post(
+      "/MaestrosMatrix/selects",
+      detalle
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getRelations = async (detalle) => {
+  try {
+    const { data } = await httpConToken.post(
+      "/MaestrosMatrix/relations",
+      detalle
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const startNewData = (datas, setShowModal) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await httpConToken.post(
+        "/MaestrosMatrix/agregar",
+        datas
+      );
+      if (data.data) {
+        dispatch(addMaestrosMatrix(datas.data));
+        toast.success("Se grabaron con exito los datos");
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire("Error", "No se pudieron guardar los datos", "error");
+    }
+  };
+};
+
 const permisos = (data) => ({
   type: types.maestrosMatrixPermisos,
   payload: data,
@@ -41,5 +87,10 @@ const permisos = (data) => ({
 
 const datos = (data) => ({
   type: types.maestrosMatrixDatos,
+  payload: data,
+});
+
+export const addMaestrosMatrix = (data) => ({
+  type: types.maestrosMAtrixDatosAdd,
   payload: data,
 });

@@ -41,6 +41,24 @@ export default function MaestrosMatrixDetalle() {
     return <h1>Cargando...</h1>;
   }
 
+  if (data.descripciones.length !== data.detalles.length) {
+    return (
+      <>
+        <Nav titulo="Editar Datos Tabla" version="Abril-23-2022" />
+        <Container className="maestros-matrix-detalle">
+          <Grid>
+            <Grid.Column width={8}>
+              <Link to="/MaestrosMatrix">
+                <Button>Atras</Button>
+              </Link>
+            </Grid.Column>
+          </Grid>
+          <h1>Esta mal configurada la tabla</h1>
+        </Container>
+      </>
+    );
+  }
+
   return (
     <>
       <Nav titulo="Editar Datos Tabla" version="Abril-23-2022" />
@@ -71,6 +89,15 @@ const Name = ({ column, detalle }) => (
   </>
 );
 
+const CustomTitle = ({ row, column }) => (
+  <div
+    data-tag="allowRowEvents"
+    style={{ overflow: "hidden", whiteSpace: "wrap", textOverflow: "ellipses" }}
+  >
+    {row[column]}
+  </div>
+);
+
 function columns(data) {
   const columns = [];
   if (data.permisos.Tabcvi === "*") {
@@ -84,6 +111,7 @@ function columns(data) {
         ),
         selector: (row) => row[detalle.descripcion],
         sortable: true,
+        cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
       });
     });
   } else {
@@ -99,6 +127,7 @@ function columns(data) {
           ),
           selector: (row) => row[detalle.descripcion],
           sortable: true,
+          cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
         });
       }
     });

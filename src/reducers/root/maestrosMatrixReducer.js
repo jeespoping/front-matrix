@@ -25,6 +25,15 @@ export const MaestrosMatrixDatosReducer = (state = initialState, action) => {
         ...action.payload,
         checking: false,
       };
+    case types.maestrosMAtrixDatosAdd:
+      console.log(state.data);
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          data: [...state.data.data, action.payload],
+        },
+      };
     default:
       return state;
   }
