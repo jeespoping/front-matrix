@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { map } from "lodash";
-import { getDetalles } from "../../../../actions/root/maestrosMatrix";
+import { map, find } from "lodash";
+import Swal from "sweetalert2";
+import {
+  getDetalles,
+  startDeleteData,
+} from "../../../../actions/root/maestrosMatrix";
 import Nav from "../../../../components/Nav";
 import SuperTable from "../../../../components/SuperTable";
 import "./MaestrosMatrixDetalle.scss";
@@ -10,6 +14,7 @@ import { Button, Container, Grid, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import NewForm from "../../../../components/Root/MaestrosMatrix/NewForm";
 import ModalBasic from "../../../../components/Modal/ModalBasic";
+import FormEdit from "../../../../components/Root/MaestrosMatrix/FormEdit";
 
 export default function MaestrosMatrixDetalle() {
   const { tabla } = useParams();
@@ -24,11 +29,17 @@ export default function MaestrosMatrixDetalle() {
     dispatch(getDetalles({ tabla: tabla }));
   }, [dispatch, tabla]);
 
-  const handlerModal = (type) => {
+  const handlerModal = (type, row) => {
     switch (type) {
       case "nuevo":
         setTitleModal("Crear nuevo registro");
         setChildrenModal(<NewForm setShowModal={setShowModal} />);
+        setShowModal(true);
+        break;
+
+      case "editar":
+        setTitleModal("Editar registros");
+        setChildrenModal(<FormEdit setShowModal={setShowModal} row={row} />);
         setShowModal(true);
         break;
 
@@ -37,26 +48,29 @@ export default function MaestrosMatrixDetalle() {
     }
   };
 
+  const handlerDelete = (row) => {
+    Swal.fire({
+      title: "Cuidado!",
+      icon: "question",
+      text: "Estas seguro que desea eliminar este dato",
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: "SI",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const state = {
+          permisos: data.permisos,
+          row: row.id,
+        };
+        dispatch(startDeleteData(state));
+      }
+    });
+  };
+
   if (checking) {
     return <h1>Cargando...</h1>;
-  }
-
-  if (data.descripciones.length !== data.detalles.length) {
-    return (
-      <>
-        <Nav titulo="Editar Datos Tabla" version="Abril-23-2022" />
-        <Container className="maestros-matrix-detalle">
-          <Grid>
-            <Grid.Column width={8}>
-              <Link to="/MaestrosMatrix">
-                <Button>Atras</Button>
-              </Link>
-            </Grid.Column>
-          </Grid>
-          <h1>Esta mal configurada la tabla</h1>
-        </Container>
-      </>
-    );
   }
 
   return (
@@ -74,7 +88,10 @@ export default function MaestrosMatrixDetalle() {
           </Grid.Column>
         </Grid>
       </Container>
-      <SuperTable columns={columns(data)} datas={data.data} />
+      <SuperTable
+        columns={columns(data, handlerModal, handlerDelete)}
+        datas={data.data}
+      />
       <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
         {childrenModal}
       </ModalBasic>
@@ -84,7 +101,7 @@ export default function MaestrosMatrixDetalle() {
 
 const Name = ({ column, detalle }) => (
   <>
-    {detalle} <br />
+    ({detalle}) <br />
     {column}
   </>
 );
@@ -98,15 +115,18 @@ const CustomTitle = ({ row, column }) => (
   </div>
 );
 
-function columns(data) {
+function columns(data, handlerModal, handlerDelete) {
   const columns = [];
   if (data.permisos.Tabcvi === "*") {
-    map(data.detalles, (detalle, index) => {
+    map(data.detalles, (detalle) => {
       columns.push({
         name: (
           <Name
             column={detalle.descripcion}
-            detalle={data.descripciones[index].Dic_Descripcion}
+            detalle={
+              find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
+                ?.Dic_Descripcion
+            }
           />
         ),
         selector: (row) => row[detalle.descripcion],
@@ -116,13 +136,16 @@ function columns(data) {
     });
   } else {
     const permisos = data.permisos.Tabcvi.split(",");
-    map(data.detalles, (detalle, index) => {
+    map(data.detalles, (detalle) => {
       if (permisos.includes(detalle.descripcion)) {
         columns.push({
           name: (
             <Name
               column={detalle.descripcion}
-              detalle={data.descripciones[index].Dic_Descripcion}
+              detalle={
+                find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
+                  ?.Dic_Descripcion
+              }
             />
           ),
           selector: (row) => row[detalle.descripcion],
@@ -140,7 +163,7 @@ function columns(data) {
           positive
           size="mini"
           type="button"
-          onClick={() => console.log(row)}
+          onClick={() => handlerModal("editar", row)}
         >
           <Icon name="edit" />
         </Button>
@@ -152,7 +175,12 @@ function columns(data) {
     {
       name: "Elimnar",
       cell: (row) => (
-        <Button negative size="mini" type="button">
+        <Button
+          onClick={() => handlerDelete(row)}
+          negative
+          size="mini"
+          type="button"
+        >
           <Icon name="delete" />
         </Button>
       ),

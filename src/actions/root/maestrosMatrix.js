@@ -80,6 +80,50 @@ export const startNewData = (datas, setShowModal) => {
   };
 };
 
+export const startUpdatedata = (datas, setShowModal, setIsLoading) => {
+  return async (dispatch) => {
+    setIsLoading(true);
+    try {
+      const { data } = await httpConToken.post(
+        "/MaestrosMatrix/actualizar",
+        datas
+      );
+      if (data.data === 1) {
+        dispatch(updateMaestrosMatrix(datas));
+        toast.success("Se actualizaron correctamente los datos");
+        setShowModal(false);
+      } else {
+        toast.warning("No haz modificado ningun dato");
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire("Error", "No se pudieron actualizar los datos", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+};
+
+export const startDeleteData = (datas) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await httpConToken.post(
+        "/MaestrosMatrix/eliminar",
+        datas
+      );
+      if (data.data === 1) {
+        dispatch(deleteMaestrosMAtrix(datas));
+        toast.success("Se Elimino el dato correctamente");
+      } else {
+        toast.warning("No se pudo eliminar el dato");
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire("Error", "No se pudo eliminar el datodatos", "error");
+    }
+  };
+};
+
 const permisos = (data) => ({
   type: types.maestrosMatrixPermisos,
   payload: data,
@@ -92,5 +136,15 @@ const datos = (data) => ({
 
 export const addMaestrosMatrix = (data) => ({
   type: types.maestrosMAtrixDatosAdd,
+  payload: data,
+});
+
+export const updateMaestrosMatrix = (data) => ({
+  type: types.maestrosMatrixDatosUpdate,
+  payload: data,
+});
+
+export const deleteMaestrosMAtrix = (data) => ({
+  type: types.maestrosMatrixDatosDelete,
   payload: data,
 });

@@ -26,12 +26,29 @@ export const MaestrosMatrixDatosReducer = (state = initialState, action) => {
         checking: false,
       };
     case types.maestrosMAtrixDatosAdd:
-      console.log(state.data);
       return {
         ...state,
         data: {
           ...state.data,
           data: [...state.data.data, action.payload],
+        },
+      };
+    case types.maestrosMatrixDatosUpdate:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          data: state.data.data.map((e) =>
+            e.id === action.payload.row ? { ...e, ...action.payload.data } : e
+          ),
+        },
+      };
+    case types.maestrosMatrixDatosDelete:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          data: state.data.data.filter((e) => e.id !== action.payload.row),
         },
       };
     default:

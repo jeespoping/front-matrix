@@ -3,7 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import { getRelations } from "../../../../actions/root/maestrosMatrix";
 import "./DinamicRelation.scss";
 
-export default function DinamicRelation({ formik, detalle }) {
+export default function DinamicRelation({ formik, detalle, value = "" }) {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export default function DinamicRelation({ formik, detalle }) {
       width={12}
       clearable
       search
+      value={value}
       selection
       options={options}
       onChange={(_, data) => {

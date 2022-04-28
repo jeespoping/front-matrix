@@ -1,0 +1,22 @@
+@import "../../../../scss/index.scss";
+
+.form-edit{
+    margin: 20px 0;
+
+    .ui.grid{
+
+        &:nth-child(odd){
+            background-color: $background-light;
+        }
+        &:nth-child(even){
+            background-color: $background-dark;
+        }
+    }
+    p{
+        margin: 0;
+        font-weight: bold;
+    }
+    .group-button{
+        margin: 0;
+    }
+}
