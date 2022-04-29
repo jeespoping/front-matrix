@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown } from "semantic-ui-react";
+import { Search } from "semantic-ui-react";
+import { escapeRegExp, filter } from "lodash";
 import { getRelations } from "../../../../actions/root/maestrosMatrix";
 import "./DinamicRelation.scss";
 
 export default function DinamicRelation({ formik, detalle, value = "" }) {
   const [options, setOptions] = useState([]);
+  const [results, setResults] = useState([]);
+  const [valor, setValor] = useState(value);
+  const [isloading, setisloading] = useState(false);
+
+  const handleSearchChange = (e) => {
+    setValor(e.target.value);
+    setisloading(true);
+    if (valor.length > 1) {
+      const re = new RegExp(escapeRegExp(valor), "i");
+      const isMatch = (result) => re.test(result.text);
+      setResults(filter(options, isMatch));
+    } else {
+      setResults([]);
+    }
+    setisloading(false);
+  };
+
+  const handleResultSelect = (_, { result }) => {
+    setValor(result.text);
+    formik.setFieldValue(detalle.descripcion, result.value);
+  };
+
+  const handleOnBlur = (e, data) => {
+    setValor(formik.values[detalle.descripcion]);
+  };
 
   useEffect(() => {
     getRelations(detalle).then((value) => {
@@ -16,19 +42,20 @@ export default function DinamicRelation({ formik, detalle, value = "" }) {
     return <h1>Cargando...</h1>;
   }
 
+  const resultRenderer = ({ text }) => <p>{text}</p>;
+
   return (
-    <Dropdown
-      placeholder="Seleccione una opción"
-      width={12}
-      clearable
-      search
-      value={value}
-      selection
-      options={options}
-      onChange={(_, data) => {
-        formik.setFieldValue(detalle.descripcion, data.value);
-      }}
-      error={formik.errors[detalle.descripcion] && true}
-    />
+    <Search
+      placeholder="Buscar"
+      loading={isloading}
+      value={valor}
+      results={results}
+      onSearchChange={handleSearchChange}
+      resultRenderer={resultRenderer}
+      noResultsMessage="No se encontro resultados"
+      onResultSelect={handleResultSelect}
+      onBlur={handleOnBlur}
+      className={formik.errors[detalle.descripcion] && "error"}
+    ></Search>
   );
 }

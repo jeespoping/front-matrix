@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Checkbox, Form, Grid } from "semantic-ui-react";
-import { map } from "lodash";
+import { map, find } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -31,75 +31,84 @@ export default function NewForm({ setShowModal }) {
         {map(data.detalles, (detalle, index) => (
           <Grid key={index}>
             <Grid.Column textAlign="center" width={8}>
-              <p>({data.descripciones[index].Dic_Descripcion})</p>
+              <p>
+                (
+                {
+                  find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
+                    ?.Dic_Descripcion
+                }
+                )
+              </p>
               <p>{detalle.descripcion}</p>
             </Grid.Column>
             <Grid.Column width={8}>
-              {{
-                0: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion] && true}
-                  />
-                ),
-                1: (
-                  <Form.Input
-                    width={12}
-                    type="number"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion]}
-                  />
-                ),
-                2: (
-                  <Form.Input
-                    width={12}
-                    type="number"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion]}
-                  />
-                ),
-                3: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte la fecha"
-                    name={detalle.descripcion}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion]}
-                  />
-                ),
-                11: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte la hora"
-                    name={detalle.descripcion}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion]}
-                  />
-                ),
-                10: (
-                  <Checkbox
-                    toggle
-                    onChange={(_, data) => {
-                      data.checked
-                        ? formik.setFieldValue(detalle.descripcion, "on")
-                        : formik.setFieldValue(detalle.descripcion, "off");
-                    }}
-                  />
-                ),
-                5: <DinamicSelect formik={formik} detalle={detalle} />,
-                9: <DinamicRelation formik={formik} detalle={detalle} />,
-                18: <DinamicRelation formik={formik} detalle={detalle} />,
-              }[detalle.tipo] || <Form.Input width={12} type="text" disabled />}
+              {
+                {
+                  0: (
+                    <Form.Input
+                      width={12}
+                      type="text"
+                      placeholder="Inserte un dato"
+                      name={detalle.descripcion}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion] && true}
+                    />
+                  ),
+                  1: (
+                    <Form.Input
+                      width={12}
+                      type="number"
+                      placeholder="Inserte un dato"
+                      name={detalle.descripcion}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion]}
+                    />
+                  ),
+                  2: (
+                    <Form.Input
+                      width={12}
+                      type="number"
+                      placeholder="Inserte un dato"
+                      name={detalle.descripcion}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion]}
+                    />
+                  ),
+                  3: (
+                    <Form.Input
+                      width={12}
+                      type="text"
+                      placeholder="Inserte la fecha"
+                      name={detalle.descripcion}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion]}
+                    />
+                  ),
+                  11: (
+                    <Form.Input
+                      width={12}
+                      type="text"
+                      placeholder="Inserte la hora"
+                      name={detalle.descripcion}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion]}
+                    />
+                  ),
+                  10: (
+                    <Checkbox
+                      toggle
+                      onChange={(_, data) => {
+                        data.checked
+                          ? formik.setFieldValue(detalle.descripcion, "on")
+                          : formik.setFieldValue(detalle.descripcion, "off");
+                      }}
+                    />
+                  ),
+                  5: <DinamicSelect formik={formik} detalle={detalle} />,
+                  9: <DinamicRelation formik={formik} detalle={detalle} />,
+                  18: <DinamicRelation formik={formik} detalle={detalle} />,
+                }[detalle.tipo]
+              }
             </Grid.Column>
           </Grid>
         ))}
@@ -123,9 +132,10 @@ export default function NewForm({ setShowModal }) {
 function initialValueForm(datas) {
   const columns = {};
   map(datas, (data) => {
-    data.tipo === "10"
-      ? (columns[data.descripcion] = "off")
-      : (columns[data.descripcion] = "");
+    ["0", "1", "2", "3", "5", "9", "11", "18"].includes(data.tipo)
+      ? (columns[data.descripcion] = "")
+      : (columns[data.descripcion] = ".");
+    data.tipo === "10" && (columns[data.descripcion] = "off");
   });
   return columns;
 }

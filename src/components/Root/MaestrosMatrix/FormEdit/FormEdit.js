@@ -25,6 +25,7 @@ export default function FormEdit({ setShowModal, row }) {
         data: formValue,
         permisos: data.permisos,
       };
+      console.log(state);
       dispatch(startUpdatedata(state, setShowModal, setIsLoading));
     },
   });
@@ -39,7 +40,7 @@ export default function FormEdit({ setShowModal, row }) {
                 (
                 {
                   find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
-                    .Dic_Descripcion
+                    ?.Dic_Descripcion
                 }
                 )
               </p>
@@ -167,7 +168,9 @@ export default function FormEdit({ setShowModal, row }) {
 function initialValueForm(datas, row) {
   const columns = {};
   map(datas, (data) => {
-    columns[data.descripcion] = row[data.descripcion];
+    ["0", "1", "2", "3", "5", "9", "10", "11", "18"].includes(data.tipo)
+      ? (columns[data.descripcion] = row[data.descripcion])
+      : (columns[data.descripcion] = ".");
   });
   return columns;
 }
