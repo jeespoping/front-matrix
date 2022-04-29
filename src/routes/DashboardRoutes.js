@@ -17,7 +17,7 @@ export default function DashboardRoutes() {
           path={"/MaestrosMatrixDetalle/:tabla"}
           component={MaestrosMatrixDetalle}
         />
-        <Redirect to="/MaestrosMatrix" />
+        <Redirect to="/inicio" />
       </Switch>
     </>
   );
