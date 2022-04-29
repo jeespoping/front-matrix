@@ -25,7 +25,6 @@ export default function FormEdit({ setShowModal, row }) {
         data: formValue,
         permisos: data.permisos,
       };
-      console.log(state);
       dispatch(startUpdatedata(state, setShowModal, setIsLoading));
     },
   });

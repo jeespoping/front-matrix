@@ -8,6 +8,10 @@
         font-weight: bold;
     }
 
+    header{
+        justify-content: space-between;
+    }
+
     .rdt_TableRow{
         &:nth-child(odd){
             background-color: $background-light;

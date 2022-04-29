@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { map, find } from "lodash";
 import Swal from "sweetalert2";
 import {
+  dataLogout,
   getDetalles,
   startDeleteData,
 } from "../../../../actions/root/maestrosMatrix";
@@ -80,7 +81,13 @@ export default function MaestrosMatrixDetalle() {
         <Grid>
           <Grid.Column width={8}>
             <Link to="/MaestrosMatrix">
-              <Button>Atras</Button>
+              <Button
+                onClick={() => {
+                  dispatch(dataLogout());
+                }}
+              >
+                Atras
+              </Button>
             </Link>
           </Grid.Column>
           <Grid.Column textAlign="right" width={8}>

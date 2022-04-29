@@ -51,6 +51,10 @@ export const MaestrosMatrixDatosReducer = (state = initialState, action) => {
           data: state.data.data.filter((e) => e.id !== action.payload.row),
         },
       };
+    case types.maestrosMatrixDatosLogout:
+      return {
+        ...initialState,
+      };
     default:
       return state;
   }

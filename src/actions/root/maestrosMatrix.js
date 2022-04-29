@@ -124,6 +124,8 @@ export const startDeleteData = (datas) => {
   };
 };
 
+export const dataLogout = () => ({ type: types.maestrosMatrixDatosLogout });
+
 const permisos = (data) => ({
   type: types.maestrosMatrixPermisos,
   payload: data,

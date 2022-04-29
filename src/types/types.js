@@ -12,10 +12,11 @@ export const types = {
   // maestros matrix
   maestrosMatrixPermisos: "[MaestrosMatrix] Permisos",
 
-  maestrosMatrixDatos: "[MaestrosMatrixDatos] Datos",
+  maestrosMatrixDatos: "[MaestrosMatrixDatos] Mostrar Datos",
   maestrosMAtrixDatosAdd: "[MaestrosMatrixDatos] Nuevo Datos",
   maestrosMatrixDatosUpdate: "[MaestrosMatrixDatos] Actualizar Dato",
   maestrosMatrixDatosDelete: "[MaestrosMatrixDatos] Eliminar Dato",
+  maestrosMatrixDatosLogout: "[MaestrosMatrixDatos] Limpiar Datos",
 
   maestrosMatrixSelect: "[MaestrosMatrixSelect] Opciones",
 };

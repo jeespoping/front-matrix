@@ -1,6 +1,12 @@
 import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Container, Input } from "semantic-ui-react";
+import {
+  Container,
+  Dropdown,
+  Grid,
+  GridColumn,
+  Input,
+} from "semantic-ui-react";
 import { filter } from "lodash";
 import { useSelector } from "react-redux";
 import "./SuperTable.scss";
@@ -9,23 +15,41 @@ export default function SuperTable({ columns, datas }) {
   const [filterText, setFilterText] = useState("");
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
 
-  /* const filteredItems = filter(
+  const optionsFilter = data.detalles.map((e, index) => ({
+    key: index,
+    value: e.descripcion,
+    text: e.descripcion,
+  }));
+
+  const [valueFilter, setValueFilter] = useState(optionsFilter[0].value);
+
+  const filteredItems = filter(
     datas,
     (item) =>
-      item[data?.detalles[0].descripcion] &&
-      item[data?.detalles[0].descripcion]
-        .toLowerCase()
-        .includes(filterText.toLowerCase())
-  ); */
+      item[valueFilter] &&
+      item[valueFilter].toLowerCase().includes(filterText.toLowerCase())
+  );
 
   const subHeaderComponentMemo = useMemo(() => {
     return (
-      <FilterComponent
-        onFilter={(e) => setFilterText(e.target.value)}
-        filterText={filterText}
-      />
+      <>
+        <Dropdown
+          placeholder="Selecciona filtro"
+          search
+          selection
+          defaultValue={optionsFilter[0].value}
+          options={optionsFilter}
+          onChange={(_, dato) => {
+            setValueFilter(dato.value);
+          }}
+        />
+        <FilterComponent
+          onFilter={(e) => setFilterText(e.target.value)}
+          filterText={filterText}
+        />
+      </>
     );
-  }, [filterText]);
+  }, [filterText, data, optionsFilter]);
 
   const customStyles = {
     header: {
@@ -66,7 +90,7 @@ export default function SuperTable({ columns, datas }) {
     <Container className="super-table">
       <DataTable
         columns={columns}
-        data={datas}
+        data={filteredItems}
         customStyles={customStyles}
         pagination
         subHeader
