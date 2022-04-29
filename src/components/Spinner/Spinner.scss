@@ -1,0 +1,14 @@
+@import "../../scss/index.scss";
+
+.spinner{
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .css-we96sk{
+        border-left: 0.25em solid $primary;
+    }
+}

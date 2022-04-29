@@ -7,6 +7,7 @@ import { PublicRoute } from "./PublicRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { startChecking } from "../actions/auth";
 import DashboardRoutes from "./DashboardRoutes";
+import Spinner from "../components/Spinner";
 
 export default function AppRouter() {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ export default function AppRouter() {
   }, [dispatch]);
 
   if (checking) {
-    return <h1>Cargando...</h1>;
+    return <Spinner />;
   }
 
   return (

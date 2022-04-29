@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { getPermisos } from "../../../actions/root/maestrosMatrix";
 import "./MaestrosMAtrix.scss";
+import Spinner from "../../../components/Spinner";
 
 export default function MaestrosMatrix() {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export default function MaestrosMatrix() {
   }, [dispatch]);
 
   if (checking) {
-    return <h1>Cargando...</h1>;
+    return <Spinner />;
   }
 
   return (

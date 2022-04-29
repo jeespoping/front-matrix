@@ -16,6 +16,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import NewForm from "../../../../components/Root/MaestrosMatrix/NewForm";
 import ModalBasic from "../../../../components/Modal/ModalBasic";
 import FormEdit from "../../../../components/Root/MaestrosMatrix/FormEdit";
+import Spinner from "../../../../components/Spinner/Spinner";
 
 export default function MaestrosMatrixDetalle() {
   const { tabla } = useParams();
@@ -71,7 +72,7 @@ export default function MaestrosMatrixDetalle() {
   };
 
   if (checking) {
-    return <h1>Cargando...</h1>;
+    return <Spinner />;
   }
 
   return (

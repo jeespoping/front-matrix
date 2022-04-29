@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search } from "semantic-ui-react";
 import { escapeRegExp, filter } from "lodash";
 import { getRelations } from "../../../../actions/root/maestrosMatrix";
+import { PacmanLoader } from "react-spinners";
 import "./DinamicRelation.scss";
 
 export default function DinamicRelation({ formik, detalle, value = "" }) {
@@ -39,7 +40,7 @@ export default function DinamicRelation({ formik, detalle, value = "" }) {
   }, [detalle]);
 
   if (options.length === 0) {
-    return <h1>Cargando...</h1>;
+    return <PacmanLoader size={10} color="#2A5DB0" />;
   }
 
   const resultRenderer = ({ text }) => <p>{text}</p>;
