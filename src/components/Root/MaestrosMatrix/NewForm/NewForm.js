@@ -48,6 +48,7 @@ export default function NewForm({ setShowModal }) {
                     <Form.Input
                       width={12}
                       type="text"
+                      input={{ autocomplete: "off" }}
                       placeholder="Inserte un dato"
                       name={detalle.descripcion}
                       onChange={formik.handleChange}
@@ -58,6 +59,7 @@ export default function NewForm({ setShowModal }) {
                     <Form.Input
                       width={12}
                       type="number"
+                      input={{ autocomplete: "off" }}
                       placeholder="Inserte un dato"
                       name={detalle.descripcion}
                       onChange={formik.handleChange}
@@ -68,6 +70,7 @@ export default function NewForm({ setShowModal }) {
                     <Form.Input
                       width={12}
                       type="number"
+                      input={{ autocomplete: "off" }}
                       placeholder="Inserte un dato"
                       name={detalle.descripcion}
                       onChange={formik.handleChange}
@@ -78,6 +81,7 @@ export default function NewForm({ setShowModal }) {
                     <Form.Input
                       width={12}
                       type="text"
+                      input={{ autocomplete: "off" }}
                       placeholder="Inserte la fecha"
                       name={detalle.descripcion}
                       onChange={formik.handleChange}
@@ -88,6 +92,7 @@ export default function NewForm({ setShowModal }) {
                     <Form.Input
                       width={12}
                       type="text"
+                      input={{ autocomplete: "off" }}
                       placeholder="Inserte la hora"
                       name={detalle.descripcion}
                       onChange={formik.handleChange}

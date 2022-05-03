@@ -51,6 +51,7 @@ export default function FormEdit({ setShowModal, row }) {
                   <Form.Input
                     width={12}
                     type="text"
+                    autocomplet="off"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
                     value={formik.values[detalle.descripcion]}
