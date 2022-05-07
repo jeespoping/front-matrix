@@ -38,17 +38,12 @@ export const MaestrosMatrixDatosReducer = (state = initialState, action) => {
         ...state,
         data: {
           ...state.data,
-          data: state.data.data.map((e) =>
-            e.id === action.payload.row ? { ...e, ...action.payload.data } : e
-          ),
-        },
-      };
-    case types.maestrosMatrixDatosDelete:
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          data: state.data.data.filter((e) => e.id !== action.payload.row),
+          datas: {
+            ...state.data.datas,
+            data: state.data.datas.data.map((e) =>
+              e.id === action.payload.row ? { ...e, ...action.payload.data } : e
+            ),
+          },
         },
       };
     case types.maestrosMatrixDatosLogout:

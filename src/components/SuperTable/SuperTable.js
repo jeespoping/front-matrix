@@ -1,19 +1,16 @@
 import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
-import {
-  Container,
-  Dropdown,
-  Grid,
-  GridColumn,
-  Input,
-} from "semantic-ui-react";
-import { filter } from "lodash";
-import { useSelector } from "react-redux";
+import { Container, Dropdown, Input, Pagination } from "semantic-ui-react";
+import { useSelector, useDispatch } from "react-redux";
 import "./SuperTable.scss";
+import { getDetalles } from "../../actions/root/maestrosMatrix";
 
 export default function SuperTable({ columns, datas }) {
   const [filterText, setFilterText] = useState("");
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const optionsFilter = data.detalles.map((e, index) => ({
     key: index,
@@ -22,13 +19,6 @@ export default function SuperTable({ columns, datas }) {
   }));
 
   const [valueFilter, setValueFilter] = useState(optionsFilter[0].value);
-
-  const filteredItems = filter(
-    datas,
-    (item) =>
-      item[valueFilter] &&
-      item[valueFilter].toLowerCase().includes(filterText.toLowerCase())
-  );
 
   const subHeaderComponentMemo = useMemo(() => {
     return (
@@ -49,7 +39,27 @@ export default function SuperTable({ columns, datas }) {
         />
       </>
     );
-  }, [filterText, data, optionsFilter]);
+  }, [filterText, optionsFilter]);
+
+  const pagination = () => {
+    return (
+      <div className="pagination_div">
+        <Pagination
+          totalPages={data.datas.last_page}
+          onPageChange={(_, { activePage }) =>
+            dispatch(
+              getDetalles(
+                { tabla: data.permisos.Tabtab },
+                activePage,
+                setIsLoading
+              )
+            )
+          }
+          activePage={data.datas.current_page}
+        />
+      </div>
+    );
+  };
 
   const customStyles = {
     header: {
@@ -90,11 +100,13 @@ export default function SuperTable({ columns, datas }) {
     <Container className="super-table">
       <DataTable
         columns={columns}
-        data={filteredItems}
+        data={datas}
         customStyles={customStyles}
-        pagination
         subHeader
         subHeaderComponent={subHeaderComponentMemo}
+        pagination
+        paginationComponent={pagination}
+        progressPending={isLoading}
       />
     </Container>
   );

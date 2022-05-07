@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { map, find } from "lodash";
-import Swal from "sweetalert2";
 import {
   dataLogout,
   getDetalles,
-  startDeleteData,
 } from "../../../../actions/root/maestrosMatrix";
 import Nav from "../../../../components/Nav";
 import SuperTable from "../../../../components/SuperTable";
@@ -50,27 +48,6 @@ export default function MaestrosMatrixDetalle() {
     }
   };
 
-  const handlerDelete = (row) => {
-    Swal.fire({
-      title: "Cuidado!",
-      icon: "question",
-      text: "Estas seguro que desea eliminar este dato",
-      showCloseButton: true,
-      showCancelButton: true,
-      focusConfirm: false,
-      confirmButtonText: "SI",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const state = {
-          permisos: data.permisos,
-          row: row.id,
-        };
-        dispatch(startDeleteData(state));
-      }
-    });
-  };
-
   if (checking) {
     return <Spinner />;
   }
@@ -97,8 +74,8 @@ export default function MaestrosMatrixDetalle() {
         </Grid>
       </Container>
       <SuperTable
-        columns={columns(data, handlerModal, handlerDelete)}
-        datas={data.data}
+        columns={columns(data, handlerModal)}
+        datas={data.datas.data}
       />
       <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
         {childrenModal}
@@ -123,7 +100,7 @@ const CustomTitle = ({ row, column }) => (
   </div>
 );
 
-function columns(data, handlerModal, handlerDelete) {
+function columns(data, handlerModal) {
   const columns = [];
   if (data.permisos.Tabcvi === "*") {
     map(data.detalles, (detalle) => {
@@ -163,39 +140,21 @@ function columns(data, handlerModal, handlerDelete) {
       }
     });
   }
-  columns.push(
-    {
-      name: "Editar",
-      cell: (row) => (
-        <Button
-          positive
-          size="mini"
-          type="button"
-          onClick={() => handlerModal("editar", row)}
-        >
-          <Icon name="edit" />
-        </Button>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
-    {
-      name: "Elimnar",
-      cell: (row) => (
-        <Button
-          onClick={() => handlerDelete(row)}
-          negative
-          size="mini"
-          type="button"
-        >
-          <Icon name="delete" />
-        </Button>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    }
-  );
+  columns.push({
+    name: "Editar",
+    cell: (row) => (
+      <Button
+        positive
+        size="mini"
+        type="button"
+        onClick={() => handlerModal("editar", row)}
+      >
+        <Icon name="edit" />
+      </Button>
+    ),
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+  });
   return columns;
 }

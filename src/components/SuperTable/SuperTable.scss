@@ -20,4 +20,10 @@
             background-color: $background-dark;
         }
     }
+
+    .pagination_div{
+        display: flex;
+        justify-content: end;
+        margin-top: 10px;
+    }
 }

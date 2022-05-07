@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Checkbox, Form, Grid } from "semantic-ui-react";
 import { map, find } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { startNewData } from "../../../../actions/root/maestrosMatrix";
 
 export default function NewForm({ setShowModal }) {
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -21,7 +22,9 @@ export default function NewForm({ setShowModal }) {
         data: formValue,
         permisos: data.permisos,
       };
-      dispatch(startNewData(state, setShowModal));
+      dispatch(
+        startNewData(state, setShowModal, data.datas.last_page, setIsLoading)
+      );
     },
   });
 
@@ -124,7 +127,12 @@ export default function NewForm({ setShowModal }) {
             </Button>
           </Grid.Column>
           <Grid.Column textAlign="right" width={8}>
-            <Button positive type="submit">
+            <Button
+              loading={isLoading}
+              disabled={isLoading}
+              positive
+              type="submit"
+            >
               Grabar
             </Button>
           </Grid.Column>

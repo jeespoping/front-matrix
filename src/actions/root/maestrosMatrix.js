@@ -19,10 +19,14 @@ export const getPermisos = () => {
   };
 };
 
-export const getDetalles = (tabla) => {
+export const getDetalles = (tabla, pageNumber = 1, setIsLoading = null) => {
   return async (dispatch) => {
+    if (setIsLoading) setIsLoading(true);
     try {
-      const { data } = await httpConToken.post("/MaestrosMatrix/datos", tabla);
+      const { data } = await httpConToken.post(
+        `/MaestrosMatrix/datos?page=${pageNumber}`,
+        tabla
+      );
       dispatch(datos(data));
     } catch (error) {
       console.log(error);
@@ -31,6 +35,8 @@ export const getDetalles = (tabla) => {
         "Puede que hayas abierto el proyecto en login de react o haya un error en el servidor",
         "error"
       );
+    } finally {
+      if (setIsLoading) setIsLoading(false);
     }
   };
 };
@@ -61,21 +67,26 @@ export const getRelations = async (detalle) => {
   }
 };
 
-export const startNewData = (datas, setShowModal) => {
+export const startNewData = (datas, setShowModal, last_page, setIsLoading) => {
   return async (dispatch) => {
+    setIsLoading(true);
     try {
       const { data } = await httpConToken.post(
         "/MaestrosMatrix/agregar",
         datas
       );
       if (data.data) {
-        dispatch(addMaestrosMatrix(datas.data));
+        await dispatch(
+          getDetalles({ tabla: datas.permisos.Tabtab }, last_page)
+        );
         toast.success("Se grabaron con exito los datos");
         setShowModal(false);
       }
     } catch (error) {
       console.log(error);
       Swal.fire("Error", "No se pudieron guardar los datos", "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 };
@@ -104,26 +115,6 @@ export const startUpdatedata = (datas, setShowModal, setIsLoading) => {
   };
 };
 
-export const startDeleteData = (datas) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await httpConToken.post(
-        "/MaestrosMatrix/eliminar",
-        datas
-      );
-      if (data.data === 1) {
-        dispatch(deleteMaestrosMAtrix(datas));
-        toast.success("Se Elimino el dato correctamente");
-      } else {
-        toast.warning("No se pudo eliminar el dato");
-      }
-    } catch (error) {
-      console.log(error);
-      Swal.fire("Error", "No se pudo eliminar el datodatos", "error");
-    }
-  };
-};
-
 export const dataLogout = () => ({ type: types.maestrosMatrixDatosLogout });
 
 const permisos = (data) => ({
@@ -143,10 +134,5 @@ export const addMaestrosMatrix = (data) => ({
 
 export const updateMaestrosMatrix = (data) => ({
   type: types.maestrosMatrixDatosUpdate,
-  payload: data,
-});
-
-export const deleteMaestrosMAtrix = (data) => ({
-  type: types.maestrosMatrixDatosDelete,
   payload: data,
 });

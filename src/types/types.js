@@ -15,7 +15,6 @@ export const types = {
   maestrosMatrixDatos: "[MaestrosMatrixDatos] Mostrar Datos",
   maestrosMAtrixDatosAdd: "[MaestrosMatrixDatos] Nuevo Datos",
   maestrosMatrixDatosUpdate: "[MaestrosMatrixDatos] Actualizar Dato",
-  maestrosMatrixDatosDelete: "[MaestrosMatrixDatos] Eliminar Dato",
   maestrosMatrixDatosLogout: "[MaestrosMatrixDatos] Limpiar Datos",
 
   maestrosMatrixSelect: "[MaestrosMatrixSelect] Opciones",
