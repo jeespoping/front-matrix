@@ -69,7 +69,9 @@ export default function MaestrosMatrixDetalle() {
             </Link>
           </Grid.Column>
           <Grid.Column textAlign="right" width={8}>
-            <Button onClick={() => handlerModal("nuevo")}>Nuevo</Button>
+            {data.permisos.Tabpgr === "on" && (
+              <Button onClick={() => handlerModal("nuevo")}>Nuevo</Button>
+            )}
           </Grid.Column>
         </Grid>
       </Container>
@@ -140,21 +142,24 @@ function columns(data, handlerModal) {
       }
     });
   }
-  columns.push({
-    name: "Editar",
-    cell: (row) => (
-      <Button
-        positive
-        size="mini"
-        type="button"
-        onClick={() => handlerModal("editar", row)}
-      >
-        <Icon name="edit" />
-      </Button>
-    ),
-    ignoreRowClick: true,
-    allowOverflow: true,
-    button: true,
-  });
+  if (data.permisos.Tabcam !== "") {
+    columns.push({
+      name: "Editar",
+      cell: (row) => (
+        <Button
+          positive
+          size="mini"
+          type="button"
+          onClick={() => handlerModal("editar", row)}
+        >
+          <Icon name="edit" />
+        </Button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    });
+  }
+
   return columns;
 }
