@@ -1,6 +1,5 @@
 import React from "react";
 import DataTable from "react-data-table-component";
-import { Container } from "semantic-ui-react";
 import "./TableBasic.scss";
 
 export default function TableBasic({ columns, data }) {
@@ -41,9 +40,9 @@ export default function TableBasic({ columns, data }) {
 
   return (
     <>
-      <Container className="table-basic">
+      <div className="table-basic">
         <DataTable columns={columns} data={data} customStyles={customStyles} />
-      </Container>
+      </div>
     </>
   );
 }
