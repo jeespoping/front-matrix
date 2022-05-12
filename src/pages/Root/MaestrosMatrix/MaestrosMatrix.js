@@ -14,17 +14,14 @@ export default function MaestrosMatrix() {
 
   const columns = [
     {
-      name: "#",
-      selector: (_, index) => index,
-      width: "60px",
-    },
-    {
       name: "Nombre de opcion",
       selector: (row) => row.Tabopc,
+      width: "45%",
     },
     {
       name: "Tabla matrix",
       selector: (row) => row.Tabtab,
+      width: "35%",
     },
     {
       name: "Ir",
@@ -33,7 +30,7 @@ export default function MaestrosMatrix() {
           <Button>IR</Button>
         </Link>
       ),
-      width: "100px",
+      width: "20%",
     },
   ];
 
