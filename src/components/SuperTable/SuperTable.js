@@ -1,6 +1,14 @@
 import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Container, Dropdown, Input, Pagination } from "semantic-ui-react";
+import Swal from "sweetalert2";
+import {
+  Button,
+  Container,
+  Dropdown,
+  Input,
+  Pagination,
+  Select,
+} from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SuperTable.scss";
 import { getDetalles } from "../../actions/root/maestrosMatrix";
@@ -18,25 +26,58 @@ export default function SuperTable({ columns, datas }) {
     text: e.descripcion,
   }));
 
-  const [valueFilter, setValueFilter] = useState(optionsFilter[0].value);
+  const [valueFilter, setValueFilter] = useState(optionsFilter[0]?.value);
+  const [condicionFilter, setCondicionFilter] = useState("=");
 
   const subHeaderComponentMemo = useMemo(() => {
+    const selectFilter = [
+      { key: "=", value: "=", text: "=" },
+      { key: "like", value: "like", text: "like" },
+      { key: "!=", value: "!=", text: "!=" },
+    ];
+
+    const handleFilter = () => {
+      dispatch(
+        getDetalles(
+          {
+            tabla: data.permisos.Tabtab,
+            valueFilter,
+            filterText,
+            condicionFilter,
+          },
+          1,
+          setIsLoading
+        )
+      );
+    };
+
     return (
       <>
         <Dropdown
           placeholder="Selecciona filtro"
           search
           selection
-          defaultValue={optionsFilter[0].value}
+          defaultValue={optionsFilter[0]?.value}
           options={optionsFilter}
           onChange={(_, dato) => {
             setValueFilter(dato.value);
+          }}
+        />
+        <Select
+          options={selectFilter}
+          selection
+          defaultValue={selectFilter[0].value}
+          onChange={(_, dato) => {
+            setCondicionFilter(dato.value);
           }}
         />
         <FilterComponent
           onFilter={(e) => setFilterText(e.target.value)}
           filterText={filterText}
         />
+        <Button onClick={handleFilter} primary>
+          Buscar
+        </Button>
       </>
     );
   }, [filterText, optionsFilter]);
@@ -49,7 +90,12 @@ export default function SuperTable({ columns, datas }) {
           onPageChange={(_, { activePage }) =>
             dispatch(
               getDetalles(
-                { tabla: data.permisos.Tabtab },
+                {
+                  tabla: data.permisos.Tabtab,
+                  valueFilter,
+                  filterText,
+                  condicionFilter,
+                },
                 activePage,
                 setIsLoading
               )

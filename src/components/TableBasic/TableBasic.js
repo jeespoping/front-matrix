@@ -9,7 +9,7 @@ export default function TableBasic({ columns, data }) {
   useEffect(() => {
     let new_data = divideArray(data);
     setNewData(new_data);
-  }, []);
+  }, [data]);
 
   const customStyles = {
     header: {
