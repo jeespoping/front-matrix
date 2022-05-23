@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Grid } from "semantic-ui-react";
+import { Grid, Input } from "semantic-ui-react";
+
+import { filter } from "lodash";
 import "./TableBasic.scss";
-import { divideArray } from "../../helpers/utils";
 
 export default function TableBasic({ columns, data }) {
-  const [newData, setNewData] = useState([]);
-  useEffect(() => {
-    let new_data = divideArray(data);
-    setNewData(new_data);
-  }, [data]);
+  const [filterText, setFilterText] = useState("");
+
+  const filteredItems = filter(
+    data,
+    (item) =>
+      item.Tabtab &&
+      item.Tabtab.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const subHeaderComponentMemo = useMemo(() => {
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        filterText={filterText}
+      />
+    );
+  }, [filterText]);
 
   const customStyles = {
     header: {
@@ -50,25 +63,26 @@ export default function TableBasic({ columns, data }) {
   return (
     <>
       <Grid columns={3} divided className="table-basic">
-        {newData &&
-          newData.map((array, key) => (
-            <Grid.Column
-              mobile={16}
-              tablet={16}
-              computer={8}
-              largeScreen={8}
-              widescreen={5}
-              key={key}
-              style={{ padding: "25px" }}
-            >
-              <DataTable
-                columns={columns}
-                data={array}
-                customStyles={customStyles}
-              />
-            </Grid.Column>
-          ))}
+        <DataTable
+          pagination
+          columns={columns}
+          data={filteredItems}
+          customStyles={customStyles}
+          subHeader
+          subHeaderComponent={subHeaderComponentMemo}
+        />
       </Grid>
     </>
   );
 }
+
+const FilterComponent = ({ filterText, onFilter }) => (
+  <>
+    <Input
+      icon="search"
+      onChange={onFilter}
+      value={filterText}
+      palceholder="Buscar..."
+    />
+  </>
+);
