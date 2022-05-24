@@ -69,6 +69,8 @@ export default function TableBasic({ columns, data }) {
           data={filteredItems}
           customStyles={customStyles}
           subHeader
+          paginationPerPage={15}
+          paginationRowsPerPageOptions={[15, 30, 60, 120, 150]}
           subHeaderComponent={subHeaderComponentMemo}
         />
       </Grid>

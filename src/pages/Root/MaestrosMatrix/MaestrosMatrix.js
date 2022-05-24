@@ -22,6 +22,7 @@ export default function MaestrosMatrix() {
       name: "Tabla matrix",
       selector: (row) => row.Tabtab,
       width: "35%",
+      sortable: true,
     },
     {
       name: "Ir",
