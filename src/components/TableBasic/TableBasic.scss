@@ -1,8 +1,9 @@
 @import "../../scss/index.scss";
 
 .table-basic{
-    margin-top: 50px;
     padding-bottom: 50px;
+    width: 757px;
+    margin: 50px auto !important;
     .rdt_TableHeadRow{
         background: $background-super-dark !important;
         color: $text-light;

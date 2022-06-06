@@ -17,6 +17,7 @@ export default function MaestrosMatrix() {
       name: "Nombre de opcion",
       selector: (row) => row.Tabopc,
       width: "45%",
+      sortable: true,
     },
     {
       name: "Tabla matrix",
