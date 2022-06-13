@@ -30,6 +30,9 @@ export default function MaestrosMatrixDetalle() {
   }, [dispatch, tabla]);
 
   const handlerModal = (type, row) => {
+    console.log("typetype", type)
+    console.log("rowrow", row)
+
     switch (type) {
       case "nuevo":
         setTitleModal("Crear nuevo registro");
@@ -51,13 +54,13 @@ export default function MaestrosMatrixDetalle() {
   if (checking) {
     return <Spinner />;
   }
-
+console.log("los datos", data)
   return (
     <>
-      <Nav titulo="Editar Datos Tabla" version="Abril-23-2022" />
+      <Nav titulo="Maestros Matrix" version="Abril-23-2022" />
       <Container className="maestros-matrix-detalle">
-        <Grid>
-          <Grid.Column width={8}>
+        <Grid className="mb-3">
+          <Grid.Column width={3}>
             <Link to="/MaestrosMatrix">
               <Button
                 onClick={() => {
@@ -68,7 +71,19 @@ export default function MaestrosMatrixDetalle() {
               </Button>
             </Link>
           </Grid.Column>
-          <Grid.Column textAlign="right" width={8}>
+          <Grid.Column textAlign="center" width={10}>
+                <Grid>
+                  <Grid.Column textAlign="center" width={16}>
+                    <h1>{data.permisos.Tabopc}</h1>
+                  </Grid.Column>
+                  {data.permisos.tabcam == "" &&
+                    <Grid.Column textAlign="center" className="p-0" width={16}>
+                      <span className="color-danger">Tabla informativa</span>
+                    </Grid.Column>
+                  }
+                </Grid>
+          </Grid.Column>
+          <Grid.Column textAlign="right" width={3}>
             {data.permisos.Tabpgr === "on" && (
               <Button onClick={() => handlerModal("nuevo")}>Nuevo</Button>
             )}
@@ -104,7 +119,8 @@ const CustomTitle = ({ row, column }) => (
 
 function columns(data, handlerModal) {
   const columns = [];
-  if (data.permisos.Tabcvi === "*") {
+  console.log("dataaa", data) 
+  //if (data.permisos.Tabcvi === "*") {
     map(data.detalles, (detalle) => {
       columns.push({
         name: (
@@ -121,7 +137,7 @@ function columns(data, handlerModal) {
         cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
       });
     });
-  } else {
+  /*} else {
     const permisos = data.permisos.Tabcvi.split(",");
     map(data.detalles, (detalle) => {
       if (permisos.includes(detalle.descripcion)) {
@@ -141,7 +157,7 @@ function columns(data, handlerModal) {
         });
       }
     });
-  }
+  }*/
   if (data.permisos.Tabcam !== "") {
     columns.push({
       name: "Editar",

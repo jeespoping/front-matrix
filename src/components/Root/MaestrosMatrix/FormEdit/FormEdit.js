@@ -15,7 +15,6 @@ export default function FormEdit({ setShowModal, row }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
-
   const formik = useFormik({
     initialValues: initialValueForm(detallesF, row),
     validationSchema: Yup.object(validation(detallesF)),
@@ -28,6 +27,15 @@ export default function FormEdit({ setShowModal, row }) {
       dispatch(startUpdatedata(state, setShowModal, setIsLoading));
     },
   });
+
+  const disabled = (descripcion) => {
+    if(data.permisos.Tabcam == "*") return false;
+
+    const array = data.permisos.Tabcam.split(",");
+    let find = array.some(elem => trimString(elem) == trimString(descripcion))
+    if(find) return false;
+    return true;
+  }
 
   return (
     <div className="new-form">
@@ -54,6 +62,7 @@ export default function FormEdit({ setShowModal, row }) {
                     autocomplet="off"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
                     onChange={formik.handleChange}
                     error={formik.errors[detalle.descripcion] && true}
@@ -65,6 +74,7 @@ export default function FormEdit({ setShowModal, row }) {
                     type="number"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
                     onChange={formik.handleChange}
                     error={formik.errors[detalle.descripcion]}
@@ -76,6 +86,7 @@ export default function FormEdit({ setShowModal, row }) {
                     type="number"
                     placeholder="Inserte un dato"
                     name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
                     onChange={formik.handleChange}
                     error={formik.errors[detalle.descripcion]}
@@ -87,6 +98,19 @@ export default function FormEdit({ setShowModal, row }) {
                     type="text"
                     placeholder="Inserte la fecha"
                     name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
+                    value={formik.values[detalle.descripcion]}
+                    onChange={formik.handleChange}
+                    error={formik.errors[detalle.descripcion]}
+                  />
+                ),
+                4: (
+                  <Form.Input
+                    width={12}
+                    type="text"
+                    placeholder="Inserte la fecha"
+                    name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
                     onChange={formik.handleChange}
                     error={formik.errors[detalle.descripcion]}
@@ -98,6 +122,7 @@ export default function FormEdit({ setShowModal, row }) {
                     type="text"
                     placeholder="Inserte la hora"
                     name={detalle.descripcion}
+                    disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
                     onChange={formik.handleChange}
                     error={formik.errors[detalle.descripcion]}
@@ -106,6 +131,7 @@ export default function FormEdit({ setShowModal, row }) {
                 10: (
                   <Checkbox
                     toggle
+                    disabled={disabled(detalle.descripcion)}
                     checked={
                       formik.values[detalle.descripcion] === "off"
                         ? false
@@ -122,6 +148,7 @@ export default function FormEdit({ setShowModal, row }) {
                   <DinamicSelect
                     value={formik.values[detalle.descripcion]}
                     formik={formik}
+                    disabled={disabled(detalle.descripcion)}
                     detalle={detalle}
                   />
                 ),
@@ -129,6 +156,7 @@ export default function FormEdit({ setShowModal, row }) {
                   <DinamicRelation
                     value={formik.values[detalle.descripcion]}
                     formik={formik}
+                    disabled={disabled(detalle.descripcion)}
                     detalle={detalle}
                   />
                 ),
@@ -136,6 +164,7 @@ export default function FormEdit({ setShowModal, row }) {
                   <DinamicRelation
                     value={formik.values[detalle.descripcion]}
                     formik={formik}
+                    disabled={disabled(detalle.descripcion)}
                     detalle={detalle}
                   />
                 ),
@@ -168,10 +197,11 @@ export default function FormEdit({ setShowModal, row }) {
 function initialValueForm(datas, row) {
   const columns = {};
   map(datas, (data) => {
-    ["0", "1", "2", "3", "5", "9", "10", "11", "18"].includes(data.tipo)
-      ? (columns[data.descripcion] = row[data.descripcion])
+    ["0", "1", "2", "3", "4", "5", "9", "10", "11", "18"].includes(trimString(data.tipo))
+      ? (columns[trimString(data.descripcion)] = row[trimString(data.descripcion)])
       : (columns[data.descripcion] = ".");
   });
+  console.log("veamos las columns", columns)
   return columns;
 }
 
@@ -203,6 +233,11 @@ function validation(datas) {
           )
           .required("El campo debe estar lleno");
         break;
+        case "4":
+            values[data.descripcion] = Yup.string(
+            "El valor debe ser un String"
+          ).required("El campo debe estar lleno");
+          break;
       case "11":
         values[data.descripcion] = Yup.string()
           .matches(
@@ -230,14 +265,31 @@ function validation(datas) {
   return values;
 }
 
+function trimString(word){
+  return word.toString().trim()
+}
+
 function detalles(datas) {
-  if (datas.permisos.Tabcam === "*") {
+  if(datas.permisos.Tabcvi === "*" || datas.permisos.Tabcam === "*"){
     return datas.detalles;
-  } else {
-    const array = datas.permisos.Tabcam.split(",");
-    return filter(
+  }else {
+    //mostrar informacion que esta en Tabcvi
+    const array = datas.permisos.Tabcvi.split(",");
+    let data = filter(
       datas.detalles,
-      (item) => array.includes(item.descripcion) && item.descripcion
+      (item) => array.includes(trimString(item.descripcion) && trimString(item.descripcion))
     );
+
+    //mostrar informacion que esta en Tabcam
+    const arrayTabcam = datas.permisos.Tabcam.split(",");
+    arrayTabcam.forEach(elem => {
+      let find = data.some(elemTabcvi => trimString(elemTabcvi.descripcion) === trimString(elem))
+      if(!find){
+        let elementNew = datas.detalles.find(elemDetalle => trimString(elemDetalle.descripcion) === trimString(elem))
+        data.push(elementNew)
+      }
+    })
+
+    return data
   }
 }

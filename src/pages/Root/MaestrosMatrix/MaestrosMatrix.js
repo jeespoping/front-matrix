@@ -16,13 +16,13 @@ export default function MaestrosMatrix() {
     {
       name: "Nombre de opcion",
       selector: (row) => row.Tabopc,
-      width: "45%",
+      width: "50%",
       sortable: true,
     },
     {
       name: "Tabla matrix",
       selector: (row) => row.Tabtab,
-      width: "35%",
+      width: "30%",
       sortable: true,
     },
     {
