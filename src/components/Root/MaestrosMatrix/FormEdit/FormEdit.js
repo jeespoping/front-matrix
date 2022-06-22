@@ -104,18 +104,6 @@ export default function FormEdit({ setShowModal, row }) {
                     error={formik.errors[detalle.descripcion]}
                   />
                 ),
-                4: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte la fecha"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
-                    error={formik.errors[detalle.descripcion]}
-                  />
-                ),
                 11: (
                   <Form.Input
                     width={12}
@@ -201,7 +189,6 @@ function initialValueForm(datas, row) {
       ? (columns[trimString(data.descripcion)] = row[trimString(data.descripcion)])
       : (columns[data.descripcion] = ".");
   });
-  console.log("veamos las columns", columns)
   return columns;
 }
 

@@ -6,9 +6,6 @@ import "./DinamicSelect.scss";
 export default function DinamicSelect({ formik, detalle, value = "", disabled = false }) {
   const [options, setOptions] = useState([]);
   const [placeholder, setPlaceholder] = useState("Seleccione una opción");
-console.log("formik",formik)
-console.log("detalle",detalle)
-console.log("value",value)
 
   // useEffect(() => {
   //   getSelects(detalle).then((value) => {
@@ -23,7 +20,6 @@ console.log("value",value)
         setOptions(value.data);
         setPlaceholder("Seleccione una opción")
       });
-      console.log("clic", detalle)
     }
   }
 

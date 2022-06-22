@@ -30,9 +30,6 @@ export default function MaestrosMatrixDetalle() {
   }, [dispatch, tabla]);
 
   const handlerModal = (type, row) => {
-    console.log("typetype", type)
-    console.log("rowrow", row)
-
     switch (type) {
       case "nuevo":
         setTitleModal("Crear nuevo registro");
@@ -54,7 +51,6 @@ export default function MaestrosMatrixDetalle() {
   if (checking) {
     return <Spinner />;
   }
-console.log("los datos", data)
   return (
     <>
       <Nav titulo="Maestros Matrix" version="Abril-23-2022" />
@@ -119,8 +115,24 @@ const CustomTitle = ({ row, column }) => (
 
 function columns(data, handlerModal) {
   const columns = [];
-  console.log("dataaa", data) 
-  //if (data.permisos.Tabcvi === "*") {
+  if (data.permisos.Tabcam !== "") {
+    columns.push({
+      name: "Acciones",
+      cell: (row) => (
+        <Button
+          positive
+          size="mini"
+          type="button"
+          onClick={() => handlerModal("editar", row)}
+        >
+          Editar
+        </Button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    });
+  }
     map(data.detalles, (detalle) => {
       columns.push({
         name: (
@@ -137,30 +149,9 @@ function columns(data, handlerModal) {
         cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
       });
     });
-  /*} else {
-    const permisos = data.permisos.Tabcvi.split(",");
-    map(data.detalles, (detalle) => {
-      if (permisos.includes(detalle.descripcion)) {
-        columns.push({
-          name: (
-            <Name
-              column={detalle.descripcion}
-              detalle={
-                find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
-                  ?.Dic_Descripcion
-              }
-            />
-          ),
-          selector: (row) => row[detalle.descripcion],
-          sortable: true,
-          cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
-        });
-      }
-    });
-  }*/
   if (data.permisos.Tabcam !== "") {
     columns.push({
-      name: "Editar",
+      name: "Acciones",
       cell: (row) => (
         <Button
           positive
@@ -168,7 +159,7 @@ function columns(data, handlerModal) {
           type="button"
           onClick={() => handlerModal("editar", row)}
         >
-          <Icon name="edit" />
+          Editar
         </Button>
       ),
       ignoreRowClick: true,

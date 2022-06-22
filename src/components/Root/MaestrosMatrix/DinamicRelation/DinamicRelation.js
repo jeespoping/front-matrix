@@ -15,13 +15,10 @@ export default function DinamicRelation({ formik, detalle, value = "", disabled 
   const handleSearchChange = (e) => {
     setValor(e.target.value);
     setisloading(true);
-    if (valor.length > 1) {
-      const re = new RegExp(escapeRegExp(valor), "i");
-      const isMatch = (result) => re.test(result.text);
-      setResults(filter(options, isMatch));
-    } else {
-      setResults([]);
-    }
+    const re = new RegExp(escapeRegExp(valor), "i");
+    const isMatch = (result) => re.test(result.text);
+    setResults(filter(options, isMatch));
+    
     setisloading(false);
   };
 
@@ -47,7 +44,6 @@ export default function DinamicRelation({ formik, detalle, value = "", disabled 
         setOptions(value.data);
         setPlaceholder("Buscar")
       });
-      console.log("clic", detalle)
     }
   }
 

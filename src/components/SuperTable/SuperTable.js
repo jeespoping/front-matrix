@@ -5,6 +5,8 @@ import {
   Button,
   Container,
   Dropdown,
+  Grid,
+  Form,
   Input,
   Pagination,
   Select,
@@ -17,6 +19,7 @@ export default function SuperTable({ columns, datas }) {
   const [filterText, setFilterText] = useState("");
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
   const [isLoading, setIsLoading] = useState(false);
+  const [numPage, setNumPage] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -51,6 +54,30 @@ export default function SuperTable({ columns, datas }) {
       );
     };
 
+    const handleChange = (e) => {
+      setNumPage(e.target.value);
+    }
+
+    const changePage = () => {
+      if(numPage <= data.datas.last_page){
+        dispatch(
+          getDetalles(
+            {
+              tabla: data.permisos.Tabtab,
+              valueFilter,
+              filterText,
+              condicionFilter,
+            },
+            numPage,
+            setIsLoading
+          )
+        )
+      }else{
+        Swal.fire("Error", "Solo hay " +data.datas.last_page + " páginas por favor es coja otra página", "error");
+      }
+    }
+    
+
     return (
       <>
         <Dropdown
@@ -78,6 +105,19 @@ export default function SuperTable({ columns, datas }) {
         <Button onClick={handleFilter} primary>
           Buscar
         </Button>
+
+        <Form.Input
+          width={12}
+          style={{width: "9em"}}
+          type="text"
+          placeholder="Ingrese página"
+          value={numPage}
+          onChange={(e) => handleChange(e)}
+          error=""
+        />
+        <Button onClick={changePage} primary>
+          Ir
+        </Button>
       </>
     );
   }, [filterText, optionsFilter]);
@@ -87,7 +127,8 @@ export default function SuperTable({ columns, datas }) {
       <div className="pagination_div">
         <Pagination
           totalPages={data.datas.last_page}
-          onPageChange={(_, { activePage }) =>
+          onPageChange={(_, { activePage }) => {
+            setNumPage(activePage)
             dispatch(
               getDetalles(
                 {
@@ -100,6 +141,7 @@ export default function SuperTable({ columns, datas }) {
                 setIsLoading
               )
             )
+          }
           }
           activePage={data.datas.current_page}
         />
@@ -140,6 +182,13 @@ export default function SuperTable({ columns, datas }) {
         },
       },
     },
+  };
+
+  const paginationComponentOptions = {
+      rowsPerPageText: 'Filas por página',
+      rangeSeparatorText: 'de',
+      selectAllRowsItem: true,
+      selectAllRowsItemText: 'Todos',
   };
 
   return (
