@@ -340,11 +340,11 @@ console.log("data", data)
           detalles.map((row, key) => {
             if(key == 0 || key == 1){
               return(
-                <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all" }}></Column>
+                <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
               )
             }else{
               return(
-                <Column field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all" }}></Column>
+                <Column field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
               )
             }
           })
