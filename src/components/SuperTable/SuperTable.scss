@@ -2,8 +2,11 @@
 
 .super-table{
     padding-bottom: 50px;
-    .rdt_TableHeadRow{
+    thead tr th{
         background: $background-super-dark !important;
+    }
+
+    thead tr th div span{
         color: $text-light;
         font-weight: bold;
     }
@@ -12,7 +15,7 @@
         justify-content: space-between;
     }
 
-    .rdt_TableRow{
+    .p-datatable-tbody tr{
         &:nth-child(odd){
             background-color: $background-light;
         }
@@ -26,4 +29,12 @@
         justify-content: end;
         margin-top: 10px;
     }
+}
+
+.datatable-scroll-demo .p-datatable-frozen-tbody {
+    font-weight: bold;
+}
+
+.datatable-scroll-demo .p-datatable-scrollable .p-frozen-column {
+    font-weight: bold;
 }

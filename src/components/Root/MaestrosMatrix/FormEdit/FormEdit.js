@@ -13,6 +13,10 @@ export default function FormEdit({ setShowModal, row }) {
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
   const detallesF = detalles(data);
   const [isLoading, setIsLoading] = useState(false);
+console.log("Daata", data)
+console.log("detallesF", detallesF)
+console.log("rowrow", row)
+
 
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -64,7 +68,7 @@ export default function FormEdit({ setShowModal, row }) {
                     name={detalle.descripcion}
                     disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
+                    onChange={!disabled(detalle.descripcion) && formik.handleChange}
                     error={formik.errors[detalle.descripcion] && true}
                   />
                 ),
@@ -76,7 +80,8 @@ export default function FormEdit({ setShowModal, row }) {
                     name={detalle.descripcion}
                     disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
+                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
+
                     error={formik.errors[detalle.descripcion]}
                   />
                 ),
@@ -88,7 +93,8 @@ export default function FormEdit({ setShowModal, row }) {
                     name={detalle.descripcion}
                     disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
+                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
+
                     error={formik.errors[detalle.descripcion]}
                   />
                 ),
@@ -100,7 +106,8 @@ export default function FormEdit({ setShowModal, row }) {
                     name={detalle.descripcion}
                     disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
+                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
+
                     error={formik.errors[detalle.descripcion]}
                   />
                 ),
@@ -112,7 +119,8 @@ export default function FormEdit({ setShowModal, row }) {
                     name={detalle.descripcion}
                     disabled={disabled(detalle.descripcion)}
                     value={formik.values[detalle.descripcion]}
-                    onChange={formik.handleChange}
+                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
+
                     error={formik.errors[detalle.descripcion]}
                   />
                 ),
@@ -257,7 +265,8 @@ function trimString(word){
 }
 
 function detalles(datas) {
-  if(datas.permisos.Tabcvi === "*" || datas.permisos.Tabcam === "*"){
+  if(datas.permisos.Tabcvi === "*"){
+  //if(datas.permisos.Tabcvi === "*" || datas.permisos.Tabcam === "*"){
     return datas.detalles;
   }else {
     //mostrar informacion que esta en Tabcvi

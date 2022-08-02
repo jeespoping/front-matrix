@@ -87,8 +87,8 @@ export default function MaestrosMatrixDetalle() {
         </Grid>
       </Container>
       <SuperTable
-        columns={columns(data, handlerModal)}
-        datas={data.datas.data}
+        handlerModal={handlerModal}
+        //columns={columns(data, handlerModal)}
       />
       <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
         {childrenModal}
@@ -167,6 +167,58 @@ function columns(data, handlerModal) {
       button: true,
     });
   }
+  // if (data.permisos.Tabcam !== "") {
+  //   columns.push({
+  //     name: "Acciones",
+  //     cell: (row) => (
+  //       <Button
+  //         positive
+  //         size="mini"
+  //         type="button"
+  //         onClick={() => handlerModal("editar", row)}
+  //       >
+  //         Editar
+  //       </Button>
+  //     ),
+  //     ignoreRowClick: true,
+  //     allowOverflow: true,
+  //     button: true,
+  //   });
+  // }
+  //   map(data.detalles, (detalle) => {
+  //     columns.push({
+  //       name: (
+  //         <Name
+  //           column={detalle.descripcion}
+  //           detalle={
+  //             find(data.descripciones, (a) => a.Dic_Campo === detalle.campo)
+  //               ?.Dic_Descripcion
+  //           }
+  //         />
+  //       ),
+  //       selector: (row) => row[detalle.descripcion],
+  //       sortable: true,
+  //       cell: (row) => <CustomTitle row={row} column={detalle.descripcion} />,
+  //     });
+  //   });
+  // if (data.permisos.Tabcam !== "") {
+  //   columns.push({
+  //     name: "Acciones",
+  //     cell: (row) => (
+  //       <Button
+  //         positive
+  //         size="mini"
+  //         type="button"
+  //         onClick={() => handlerModal("editar", row)}
+  //       >
+  //         Editar
+  //       </Button>
+  //     ),
+  //     ignoreRowClick: true,
+  //     allowOverflow: true,
+  //     button: true,
+  //   });
+  // }
 
   return columns;
 }

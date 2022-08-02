@@ -10,6 +10,8 @@
     "formik": "^2.2.9",
     "formik-semantic-ui-react": "^2.0.0",
     "node-sass": "^7.0.1",
+    "primeicons": "^5.0.0",
+    "primereact": "^8.3.0",
     "react": "^18.0.0",
     "react-data-table-component": "^7.5.0",
     "react-dom": "^18.0.0",
