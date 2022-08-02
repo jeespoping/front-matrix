@@ -260,7 +260,7 @@ console.log("data", data)
         return a.Dic_Campo == row.campo
     })
 
-    return row.descripcion + "("+desc.Dic_Descripcion+")"
+    return "("+desc.Dic_Descripcion+")" +  row.descripcion
   }
 
   const template1 = {
@@ -334,22 +334,22 @@ console.log("data", data)
 
   return (
     <Container className="super-table">
-      <DataTable lazy paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} filterDisplay="row" dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} loading={isLoading} className="mt-3">
-        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px' }} frozen></Column>
+      <DataTable lazy paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} loading={isLoading} className="mt-3">
+        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen></Column>
         {
           detalles.map((row, key) => {
             if(key == 0 || key == 1){
               return(
-                <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '170px' }}></Column>
+                <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all" }}></Column>
               )
             }else{
               return(
-                <Column field={row.descripcion} header={getHeader(row)} style={{ width: '170px' }}></Column>
+                <Column field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all" }}></Column>
               )
             }
           })
         }
-        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px' }} frozen alignFrozen="right"></Column>
+        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen alignFrozen="right"></Column>
       </DataTable>
     </Container>
   );
