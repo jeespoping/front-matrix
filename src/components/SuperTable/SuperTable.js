@@ -334,7 +334,11 @@ console.log("data", data)
 
   return (
     <Container className="super-table">
-      <DataTable lazy paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} loading={isLoading} className="mt-3">
+      <DataTable lazy paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} 
+          dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} 
+          loading={isLoading} 
+           columnResizeMode="fit" showGridlines
+          className="mt-3">
         <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen></Column>
         {
           detalles.map((row, key) => {

@@ -1,6 +1,10 @@
 @import "../../scss/index.scss";
 
 .super-table{
+    .p-datatable .p-datatable-tbody > tr > td{
+        border: 1px solid black !important;
+    }
+
     padding-bottom: 50px;
     thead tr th{
         background: $background-super-dark !important;
