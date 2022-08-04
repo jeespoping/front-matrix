@@ -21,66 +21,42 @@ import "primeicons/primeicons.css";
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 
-
 export default function SuperTable({ handlerModal, datas, detalles, lazyParams, setLazyParams, isLoading }) {
   const [filterText, setFilterText] = useState("");
   const { data } = useSelector((state) => state.maestrosMatrixDatos);
   const { descripciones } = data
-  const [numPage, setNumPage] = useState(null);
+  const dispatch = useDispatch();
+
 console.log("detalles", detalles)
 console.log("descripciones", descripciones)
-console.log("data", data)
+console.log("dat a", data)
 
-  const optionsFilter = detalles.map((e, index) => ({
-    key: index,
-    value: e.descripcion,
-    text: e.descripcion,
-  }));
+  const optionsFilter = detalles.map((e, index) => {
+    return {
+        key: index,
+        value: e.descripcion,
+        text: e.descripcion,
+      }
+  });
 
-  const [valueFilter, setValueFilter] = useState(optionsFilter[0]?.value);
+  const [valueFilter, setValueFilter] = useState(optionsFilter[0].value);
   const [condicionFilter, setCondicionFilter] = useState("=");
 
-  const subHeaderComponentMemo = useMemo(() => {
-    const selectFilter = [
-      { key: "=", value: "=", text: "=" },
-      { key: "like", value: "like", text: "like" },
-      { key: "!=", value: "!=", text: "!=" },
-    ];
+  const handleFilter = () => {
+    setLazyParams({
+        ...lazyParams,
+        valueFilter,
+        filterText,
+        condicionFilter
+      } 
+    )
+  };
 
-    const handleChange = (e) => {
-      setNumPage(e.target.value);
-    }
-    
-    return (
-      <>
-        <Dropdown
-          placeholder="Selecciona filtro"
-          search
-          selection
-          defaultValue={optionsFilter[0]?.value}
-          options={optionsFilter}
-          onChange={(_, dato) => {
-            setValueFilter(dato.value);
-          }}
-        />
-        <Select
-          options={selectFilter}
-          selection
-          defaultValue={selectFilter[0].value}
-          onChange={(_, dato) => {
-            setCondicionFilter(dato.value);
-          }}
-        />
-        <FilterComponent
-          onFilter={(e) => setFilterText(e.target.value)}
-          filterText={filterText}
-        />
-        <Button primary>
-          Buscar
-        </Button>
-      </>
-    );
-  }, [filterText, optionsFilter]);
+  const selectFilter = [
+    { key: "=", value: "=", text: "=" },
+    { key: "like", value: "like", text: "like" },
+    { key: "!=", value: "!=", text: "!=" },
+  ];
 
   const actionBodyTemplate = (rowData) => {
     return (
@@ -95,7 +71,7 @@ console.log("data", data)
           </Button>
         </React.Fragment>
     );
-}
+  }
 
   const [pageInputTooltip, setPageInputTooltip] = useState('Presiona enter para ir a la página');
   const [rows1, setRows1] = useState(10);
@@ -146,29 +122,59 @@ console.log("data", data)
     }
 
   return (
-    <Container className="super-table">
-      <DataTable lazy paginatorTemplate={template1} footer={footer} paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} 
-          dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} 
-          loading={isLoading} 
-          columnResizeMode="fit" showGridlines
-          className="mt-3">
-        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen></Column>
-        {
-          detalles.map((row, key) => {
-            if(key == 0 || key == 1){
-              return(
-                <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
-              )
-            }else{
-              return(
-                <Column field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
-              )
+    <>
+      <div className="filter-table">
+        <Select
+          options={optionsFilter}
+          defaultValue={optionsFilter[0].value}
+          selection
+          search
+          onChange={(_, dato) => {
+            setValueFilter(dato.value);
+          }}
+        />
+        <Select
+          options={selectFilter}
+          selection
+          search
+          defaultValue={selectFilter[0].value}
+          onChange={(_, dato) => {
+            setCondicionFilter(dato.value);
+          }}
+        />
+        <FilterComponent
+          onFilter={(e) => setFilterText(e.target.value)}
+          filterText={filterText}
+        />
+        <Button onClick={handleFilter} primary>
+          Buscar
+        </Button>
+      </div>
+
+      <Container className="super-table">
+          <DataTable lazy paginatorTemplate={template1} footer={footer} paginator first={lazyParams.first} rows={rows1} totalRecords={datas.total} 
+              dataKey="id" scrollDirection="both" scrollable onPage={onPage} value={datas.data} 
+              loading={isLoading} 
+              columnResizeMode="fit" showGridlines
+              className="mt-3">
+            <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen></Column>
+            {
+              detalles.map((row, key) => {
+                if(key == 0 || key == 1){
+                  return(
+                    <Column frozen field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
+                  )
+                }else{
+                  return(
+                    <Column field={row.descripcion} header={getHeader(row)} style={{ width: '110px', fontSize: "11px", wordBreak: "break-all", fontWeight: "bold", padding: 0,  paddingLeft: "5px", paddingRight: "5px" }}></Column>
+                  )
+                }
+              })
             }
-          })
-        }
-        <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen alignFrozen="right"></Column>
-      </DataTable>
-    </Container>
+            <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen alignFrozen="right"></Column>
+          </DataTable>
+      </Container>
+    </> 
   );
 }
 

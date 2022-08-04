@@ -30,16 +30,19 @@ export default function MaestrosMatrixDetalle() {
     rows: 10,
     page: 0,
     sortField: null,
-    sortOrder: null
+    sortOrder: null,
+    valueFilter: null,
+    filterText: null,
+    condicionFilter: "=",
   });
 
   useEffect(() => {
     dispatch(getDetalles(
       { 
         tabla: tabla,
-        valueFilter: null,
-        filterText: null,
-        condicionFilter: "="
+        valueFilter: lazyParams.valueFilter,
+        filterText: lazyParams.filterText,
+        condicionFilter: lazyParams.condicionFilter
       },
       lazyParams.page + 1,
       setIsLoading
@@ -70,51 +73,54 @@ export default function MaestrosMatrixDetalle() {
   }
   return (
     <>
-      <Nav titulo="Maestros Matrix" version="Abril-23-2022" />
-      <Container className="maestros-matrix-detalle">
-        <Grid className="mb-3">
-          <Grid.Column width={3}>
-            <Link to="/MaestrosMatrix">
-              <Button
-                onClick={() => {
-                  dispatch(dataLogout());
-                }}
-              >
-                Atras
-              </Button>
-            </Link>
-          </Grid.Column>
-          <Grid.Column textAlign="center" width={10}>
-                <Grid>
-                  <Grid.Column textAlign="center" width={16}>
-                    <h1>{data.permisos.Tabopc}</h1>
-                  </Grid.Column>
-                  {data.permisos.tabcam == "" &&
-                    <Grid.Column textAlign="center" className="p-0" width={16}>
-                      <span className="color-danger">Tabla informativa</span>
+    {data &&
+      <>
+        <Nav titulo="Maestros Matrix" version="Abril-23-2022" />
+        <Container className="maestros-matrix-detalle">
+          <Grid className="mb-3">
+            <Grid.Column width={3}>
+              <Link to="/MaestrosMatrix">
+                <Button
+                  onClick={() => {
+                    dispatch(dataLogout());
+                  }}
+                >
+                  Atras
+                </Button>
+              </Link>
+            </Grid.Column>
+            <Grid.Column textAlign="center" width={10}>
+                  <Grid>
+                    <Grid.Column textAlign="center" width={16}>
+                      <h1>{data.permisos.Tabopc}</h1>
                     </Grid.Column>
-                  }
-                </Grid>
-          </Grid.Column>
-          <Grid.Column textAlign="right" width={3}>
-            {data.permisos.Tabpgr === "on" && (
-              <Button onClick={() => handlerModal("nuevo")}>Nuevo</Button>
-            )}
-          </Grid.Column>
-        </Grid>
-      </Container>
-      <SuperTable
-        handlerModal={handlerModal}
-        datas={data.datas}
-        detalles={data.detalles}
-        lazyParams = {lazyParams}
-        setLazyParams = {setLazyParams}
-        isLoading = {isLoading}
-        //columns={columns(data, handlerModal)}
-      />
-      <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
-        {childrenModal}
-      </ModalBasic>
+                    {data.permisos.tabcam == "" &&
+                      <Grid.Column textAlign="center" className="p-0" width={16}>
+                        <span className="color-danger">Tabla informativa</span>
+                      </Grid.Column>
+                    }
+                  </Grid>
+            </Grid.Column>
+            <Grid.Column textAlign="right" width={3}>
+              {data.permisos.Tabpgr === "on" && (
+                <Button onClick={() => handlerModal("nuevo")}>Nuevo</Button>
+              )}
+            </Grid.Column>
+          </Grid>
+        </Container>
+        <SuperTable
+          handlerModal={handlerModal}
+          datas={data.datas}
+          detalles={data.detalles}
+          lazyParams = {lazyParams}
+          setLazyParams = {setLazyParams}
+          isLoading = {isLoading}
+        />
+        <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
+          {childrenModal}
+        </ModalBasic>
+      </>
+    }
     </>
   );
 }

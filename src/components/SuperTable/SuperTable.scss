@@ -52,3 +52,14 @@
 .datatable-scroll-demo .p-datatable-scrollable .p-frozen-column {
     font-weight: bold;
 }
+
+.filter-table {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.filter-table > div {
+    margin-right: 5px;
+    margin-left: 5px;
+}
