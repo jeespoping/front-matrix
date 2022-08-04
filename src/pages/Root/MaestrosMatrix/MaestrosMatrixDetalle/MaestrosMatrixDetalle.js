@@ -24,10 +24,27 @@ export default function MaestrosMatrixDetalle() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState("");
   const [childrenModal, setChildrenModal] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lazyParams, setLazyParams] = useState({
+    first: 1,
+    rows: 10,
+    page: 0,
+    sortField: null,
+    sortOrder: null
+  });
 
   useEffect(() => {
-    dispatch(getDetalles({ tabla: tabla }));
-  }, [dispatch, tabla]);
+    dispatch(getDetalles(
+      { 
+        tabla: tabla,
+        valueFilter: null,
+        filterText: null,
+        condicionFilter: "="
+      },
+      lazyParams.page + 1,
+      setIsLoading
+    ));
+  }, [dispatch, tabla, lazyParams]);
 
   const handlerModal = (type, row) => {
     switch (type) {
@@ -88,6 +105,11 @@ export default function MaestrosMatrixDetalle() {
       </Container>
       <SuperTable
         handlerModal={handlerModal}
+        datas={data.datas}
+        detalles={data.detalles}
+        lazyParams = {lazyParams}
+        setLazyParams = {setLazyParams}
+        isLoading = {isLoading}
         //columns={columns(data, handlerModal)}
       />
       <ModalBasic show={showModal} setShow={setShowModal} title={titleModal}>
