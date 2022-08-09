@@ -23,6 +23,7 @@ console.log("rowrow", row)
     initialValues: initialValueForm(detallesF, row),
     validationSchema: Yup.object(validation(detallesF)),
     onSubmit: (formValue) => {
+      console.log("siss")
       const state = {
         row: row.id,
         data: formValue,

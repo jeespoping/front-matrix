@@ -171,7 +171,6 @@ console.log("dat a", data)
                 }
               })
             }
-            <Column body={actionBodyTemplate} header="Editar" style={{ width: '100px', fontSize: "11px" }} frozen alignFrozen="right"></Column>
           </DataTable>
       </Container>
     </> 

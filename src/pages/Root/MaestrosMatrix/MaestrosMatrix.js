@@ -46,7 +46,7 @@ export default function MaestrosMatrix() {
 
   return (
     <>
-      <Nav titulo="Editar Datos Tabla" version="Abril-23-2022" />
+      <Nav titulo="Editar Datos Tabla" version="Agosto-08-2022" />
       <TableBasic columns={columns} data={data} />
     </>
   );
