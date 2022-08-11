@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { map, filter, find } from "lodash";
+import { map, filter, find, orderBy } from "lodash";
 import * as Yup from "yup";
 import "./FormEdit.scss";
 import DinamicSelect from "../DinamicSelect";
@@ -61,109 +61,168 @@ console.log("rowrow", row)
             <Grid.Column width={8}>
               {{
                 0: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    autocomplet="off"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                    onChange={!disabled(detalle.descripcion) && formik.handleChange}
-                    error={formik.errors[detalle.descripcion] && true}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Form.Input
+                      width={12}
+                      type="text"
+                      autocomplet="off"
+                      placeholder="Inserte un dato"
+                      name={detalle.descripcion}
+                      value={formik.values[detalle.descripcion]}
+                      onChange={formik.handleChange}
+                      error={formik.errors[detalle.descripcion] && true}
+                      />
+                    }
+                  </>
                 ),
                 1: (
-                  <Form.Input
-                    width={12}
-                    type="number"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
-
-                    error={formik.errors[detalle.descripcion]}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Form.Input
+                        width={12}
+                        type="number"
+                        placeholder="Inserte un dato"
+                        name={detalle.descripcion}
+                        value={formik.values[detalle.descripcion]}
+                        onChange={formik.handleChange}
+                        error={formik.errors[detalle.descripcion]}
+                      />
+                    }
+                </>
                 ),
                 2: (
-                  <Form.Input
-                    width={12}
-                    type="number"
-                    placeholder="Inserte un dato"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
-
-                    error={formik.errors[detalle.descripcion]}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Form.Input
+                        width={12}
+                        type="number"
+                        placeholder="Inserte un dato"
+                        name={detalle.descripcion}
+                        value={formik.values[detalle.descripcion]}
+                        onChange={formik.handleChange}
+                        error={formik.errors[detalle.descripcion]}
+                      />
+                    }
+                  </>  
                 ),
                 3: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte la fecha"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
-
-                    error={formik.errors[detalle.descripcion]}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Form.Input
+                        width={12}
+                        type="text"
+                        placeholder="Inserte la fecha"
+                        name={detalle.descripcion}
+                        value={formik.values[detalle.descripcion]}
+                        onChange={formik.handleChange}
+                        error={formik.errors[detalle.descripcion]}
+                      />
+                    }
+                  </>
                 ),
                 11: (
-                  <Form.Input
-                    width={12}
-                    type="text"
-                    placeholder="Inserte la hora"
-                    name={detalle.descripcion}
-                    disabled={disabled(detalle.descripcion)}
-                    value={formik.values[detalle.descripcion]}
-                                        onChange={!disabled(detalle.descripcion) && formik.handleChange}
-
-                    error={formik.errors[detalle.descripcion]}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Form.Input
+                        width={12}
+                        type="text"
+                        placeholder="Inserte la hora"
+                        name={detalle.descripcion}
+                        value={formik.values[detalle.descripcion]}
+                        onChange={formik.handleChange}
+                        error={formik.errors[detalle.descripcion]}
+                      />
+                    }
+                  </>
                 ),
                 10: (
-                  <Checkbox
-                    toggle
-                    disabled={disabled(detalle.descripcion)}
-                    checked={
-                      formik.values[detalle.descripcion] === "off"
-                        ? false
-                        : true
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <Checkbox
+                        toggle
+                        checked={
+                          formik.values[detalle.descripcion] === "off"
+                            ? false
+                            : true
+                        }
+                        onChange={(_, data) => {
+                          data.checked
+                            ? formik.setFieldValue(detalle.descripcion, "on")
+                            : formik.setFieldValue(detalle.descripcion, "off");
+                        }}
+                      />
                     }
-                    onChange={(_, data) => {
-                      data.checked
-                        ? formik.setFieldValue(detalle.descripcion, "on")
-                        : formik.setFieldValue(detalle.descripcion, "off");
-                    }}
-                  />
+                  </>
                 ),
                 5: (
-                  <DinamicSelect
-                    value={formik.values[detalle.descripcion]}
-                    formik={formik}
-                    disabled={disabled(detalle.descripcion)}
-                    detalle={detalle}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <DinamicSelect
+                        value={formik.values[detalle.descripcion]}
+                        formik={formik}
+                        detalle={detalle}
+                      />
+                    }
+                  </>
                 ),
                 9: (
-                  <DinamicRelation
-                    value={formik.values[detalle.descripcion]}
-                    formik={formik}
-                    disabled={disabled(detalle.descripcion)}
-                    detalle={detalle}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <DinamicRelation
+                        value={formik.values[detalle.descripcion]}
+                        formik={formik}
+                        detalle={detalle}
+                      />
+                    }
+                  </>
                 ),
                 18: (
-                  <DinamicRelation
-                    value={formik.values[detalle.descripcion]}
-                    formik={formik}
-                    disabled={disabled(detalle.descripcion)}
-                    detalle={detalle}
-                  />
+                  <>
+                    {disabled(detalle.descripcion) ?
+                      <p>
+                        {formik.values[detalle.descripcion]}
+                      </p>
+                      :
+                      <DinamicRelation
+                        value={formik.values[detalle.descripcion]}
+                        formik={formik}
+                        detalle={detalle}
+                      />
+                    }
+                  </>
                 ),
               }[detalle.tipo] || <Form.Input width={12} type="text" disabled />}
             </Grid.Column>
@@ -266,6 +325,8 @@ function trimString(word){
 }
 
 function detalles(datas) {
+  let detallesOrder = orderBy(datas.detalles, ['isIndex'],['desc']);
+
   if(datas.permisos.Tabcvi === "*"){
   //if(datas.permisos.Tabcvi === "*" || datas.permisos.Tabcam === "*"){
     return datas.detalles;
@@ -274,7 +335,7 @@ function detalles(datas) {
     const array = datas.permisos.Tabcvi.split(",");
     let data = filter(
       datas.detalles,
-      (item) => array.includes(trimString(item.descripcion) && trimString(item.descripcion))
+      (item) => array.includes(trimString(item.descripcion) && trimString(item.descripcion)) || item.isIndex == 1
     );
 
     //mostrar informacion que esta en Tabcam
