@@ -248,6 +248,91 @@ console.log("rowrow", row)
       </Form>
     </div>
   );
+
+  function validation(datas) {
+
+    const disabled = (descripcion) => {
+      if(data.permisos.Tabcam == "*") return false;
+  
+      const array = data.permisos.Tabcam.split(",");
+      let find = array.some(elem => trimString(elem) == trimString(descripcion))
+      if(find) return false;
+      return true;
+    }
+
+    const values = {};
+    map(datas, (data) => {
+      switch (data.tipo) {
+        case "0":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.string(
+              "El valor debe ser un String"
+            ).required("El campo debe estar lleno");
+          }
+          break;
+        case "1":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.number("Debe ser un numero")
+            .integer("debe ser entero")
+            .positive("debe ser positivo")
+            .required("El campo debe estar lleno");
+          }
+          break;
+        case "2":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.number(
+              "Debe ser un numero Real"
+            ).required("El campo debe estar lleno");
+          }
+          break;
+        case "3":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.string()
+            .matches(
+              /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
+              "Debe estar en formato YYYY-MM-DD"
+            )
+            .required("El campo debe estar lleno");
+          }
+          break;
+          case "4":
+            if(!disabled(data.descripcion)){
+              values[data.descripcion] = Yup.string(
+                "El valor debe ser un String"
+              ).required("El campo debe estar lleno");
+            }
+            break;
+        case "11":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.string()
+            .matches(
+              /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/,
+              "Debe estar en formato hh:mm:ss"
+            )
+            .required("El campo debe estar lleno");
+          }
+          break;
+  
+        case "9":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.string(
+              "El valor debe ser un String"
+            ).required("El campo debe estar lleno");
+          }
+          break;
+        case "18":
+          if(!disabled(data.descripcion)){
+            values[data.descripcion] = Yup.string(
+              "El valor debe ser un String"
+            ).required("El campo debe estar lleno");
+          }
+          break;
+        default:
+          break;
+      }
+    });
+    return values;
+  }
 }
 
 function initialValueForm(datas, row) {
@@ -260,66 +345,6 @@ function initialValueForm(datas, row) {
   return columns;
 }
 
-function validation(datas) {
-  const values = {};
-  map(datas, (data) => {
-    switch (data.tipo) {
-      case "0":
-        values[data.descripcion] = Yup.string(
-          "El valor debe ser un String"
-        ).required("El campo debe estar lleno");
-        break;
-      case "1":
-        values[data.descripcion] = Yup.number("Debe ser un numero")
-          .integer("debe ser entero")
-          .positive("debe ser positivo")
-          .required("El campo debe estar lleno");
-        break;
-      case "2":
-        values[data.descripcion] = Yup.number(
-          "Debe ser un numero Real"
-        ).required("El campo debe estar lleno");
-        break;
-      case "3":
-        values[data.descripcion] = Yup.string()
-          .matches(
-            /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/,
-            "Debe estar en formato YYYY-MM-DD"
-          )
-          .required("El campo debe estar lleno");
-        break;
-        case "4":
-            values[data.descripcion] = Yup.string(
-            "El valor debe ser un String"
-          ).required("El campo debe estar lleno");
-          break;
-      case "11":
-        values[data.descripcion] = Yup.string()
-          .matches(
-            /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/,
-            "Debe estar en formato hh:mm:ss"
-          )
-          .required("El campo debe estar lleno");
-        break;
-
-      case "9":
-        values[data.descripcion] = Yup.string(
-          "El valor debe ser un String"
-        ).required("El campo debe estar lleno");
-        break;
-      case "18":
-        values[data.descripcion] = Yup.string(
-          "El valor debe ser un String"
-        ).required("El campo debe estar lleno");
-        break;
-
-      default:
-        break;
-    }
-  });
-  return values;
-}
-
 function trimString(word){
   return word.toString().trim()
 }
@@ -327,27 +352,27 @@ function trimString(word){
 function detalles(datas) {
   let detallesOrder = orderBy(datas.detalles, ['isIndex'],['desc']);
 
-  if(datas.permisos.Tabcvi === "*"){
+  /*if(datas.permisos.Tabcvi === "*"){
   //if(datas.permisos.Tabcvi === "*" || datas.permisos.Tabcam === "*"){
     return datas.detalles;
-  }else {
+  }else {*/
     //mostrar informacion que esta en Tabcvi
-    const array = datas.permisos.Tabcvi.split(",");
-    let data = filter(
-      datas.detalles,
-      (item) => array.includes(trimString(item.descripcion) && trimString(item.descripcion)) || item.isIndex == 1
-    );
+  const array = datas.permisos.Tabcvi.split(",");
+  let data = filter(
+    datas.detalles,
+    (item) => array.includes(trimString(item.descripcion) && trimString(item.descripcion)) || item.isIndex == 1
+  );
 
-    //mostrar informacion que esta en Tabcam
-    const arrayTabcam = datas.permisos.Tabcam.split(",");
-    arrayTabcam.forEach(elem => {
-      let find = data.some(elemTabcvi => trimString(elemTabcvi.descripcion) === trimString(elem))
-      if(!find){
-        let elementNew = datas.detalles.find(elemDetalle => trimString(elemDetalle.descripcion) === trimString(elem))
-        data.push(elementNew)
-      }
-    })
+  //mostrar informacion que esta en Tabcam
+  const arrayTabcam = datas.permisos.Tabcam.split(",");
+  arrayTabcam.forEach(elem => {
+    let find = data.some(elemTabcvi => trimString(elemTabcvi.descripcion) === trimString(elem))
+    if(!find){
+      let elementNew = datas.detalles.find(elemDetalle => trimString(elemDetalle.descripcion) === trimString(elem))
+      data.push(elementNew)
+    }
+  })
 
-    return data
-  }
+  return data
+  //}
 }
